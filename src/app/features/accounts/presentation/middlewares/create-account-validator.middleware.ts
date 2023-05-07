@@ -25,7 +25,7 @@ export const createAccountValidator = async (req: Request, res: Response, next: 
     return badRequest(res, { success: false, error: "invalid client ID" })
   }
 
-  if (clientExist.account_id !== null) {
+  if (clientExist.account_id != null) {
     return badRequest(res, { success: false, error: "user already has an account" })
   }
   const scheme = defineManagerSchema(body)
