@@ -27,7 +27,7 @@
     },
     "scripts": {
         "start": "node ./dist/server.js",
-        "build": "npx tsc --watch",
+        "build": "npx tsc",
         "dev": "ts-node-dev  --respawn --transpile-only ./src/main/server.ts",
         "migration:create": "typeorm migration:create src/app/shared/infra/db/migrations/CreateTableManagers",
         "migration:run": "typeorm-ts-node-commonjs migration:run -d src/app/shared/infra/db/data-source.ts",
