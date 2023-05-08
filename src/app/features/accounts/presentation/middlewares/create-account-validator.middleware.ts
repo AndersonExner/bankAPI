@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ZodError, z } from "zod";
+import { ZodError, string, z } from "zod";
 import { badRequest } from "../../../../shared/presentation/http-helper";
 import { ClientRepository } from "../../../users/domain/infra/repositories";
 
@@ -17,6 +17,10 @@ export const createAccountValidator = async (req: Request, res: Response, next: 
   let body = req.body;
   const { balance, limit, clientID } = req.body
 
+  if (balance < 0 || limit < 0) {
+    return badRequest(res, { success: false, error: "No negative value allowed" })
+  }
+
   const clientRepository = new ClientRepository();
 
   const clientExist = await clientRepository.verifyID(clientID)
@@ -25,7 +29,7 @@ export const createAccountValidator = async (req: Request, res: Response, next: 
     return badRequest(res, { success: false, error: "invalid client ID" })
   }
 
-  if (clientExist.account_id != null) {
+  if (clientExist.accountID) {
     return badRequest(res, { success: false, error: "user already has an account" })
   }
   const scheme = defineManagerSchema(body)
