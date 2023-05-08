@@ -10,6 +10,10 @@ export class ClientController {
     const { name, email, cpf, password } = req.body;
     const managerID = req.user.id as string
 
+    if (req.user.profile !== Profile.MANAGER) {
+      return badRequest(res, { success: false, error: 'User is not a MANAGER' })
+    }
+
     const bcrypt = new BCryptPassword();
     const repository = new ClientRepository();
 

@@ -4,6 +4,7 @@ import { BCryptPassword } from "../../../../shared/adapters/crypto";
 import { Profile } from "../../../../shared/infra/db/domain/enums/profile.enum";
 import { ManagerRepository } from "../../domain/infra/repositories";
 import { ManagerDTO } from "../../domain/dto";
+import { AccountRepository } from "../../../accounts/domain/infra/repositories";
 
 
 export class ManagerController {
@@ -31,6 +32,10 @@ export class ManagerController {
   async getClients(req: Request, res: Response) {
     const managerID = req.user.id as string
 
+    if (req.user.profile !== Profile.MANAGER) {
+      return badRequest(res, { success: false, error: 'User is not a MANAGER' })
+    }
+
     const repository = await new ManagerRepository().listClients(managerID)
 
     if (repository.length === 0) {
@@ -40,8 +45,28 @@ export class ManagerController {
     return ok(res, { success: true, data: repository })
   }
 
+  async getClientAcc(req: Request, res: Response) {
+    const {id} = req.params 
+
+    if (req.user.profile !== Profile.MANAGER) {
+      return badRequest(res, { success: false, error: 'User is not a MANAGER' })
+    }
+
+    const acc = await new AccountRepository().getAcc(id)
+
+    if (!acc) {
+      return badRequest(res, { success: false, error: "client has no account" })
+    }
+
+    return ok(res, { success: true, data: acc })
+  }
+
   async changeClientLimit(req: Request, res: Response) {
     const { newLimit, id } = req.body
+
+    if (req.user.profile !== Profile.MANAGER) {
+      return badRequest(res, { success: false, error: 'User is not a MANAGER' })
+    }
 
     if (newLimit < 0) {
       return badRequest(res, { success: false, error: "Limit must be over 0" })
@@ -58,6 +83,10 @@ export class ManagerController {
 
   async deleteAcc(req: Request, res: Response) {
     const { id } = req.body
+
+    if (req.user.profile !== Profile.MANAGER) {
+      return badRequest(res, { success: false, error: 'User is not a MANAGER' })
+    }
 
     if (!id) {
       return badRequest(res, { success: false, error: "Inform client id" })

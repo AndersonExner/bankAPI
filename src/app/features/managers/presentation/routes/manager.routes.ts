@@ -13,6 +13,8 @@ export default () => {
 
   router.get('/listClients', auth, managerController.getClients)
 
+  router.get('/clientACC/:id', auth, managerController.getClientAcc)
+
   router.put('/changeClientLimit', auth, managerController.changeClientLimit)
 
   router.delete('/deleteClient', auth, managerController.deleteAcc)

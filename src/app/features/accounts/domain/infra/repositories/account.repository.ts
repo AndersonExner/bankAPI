@@ -5,9 +5,9 @@ import { AccountDTO, NewAccountDTO } from "../../dtos";
 
 export class AccountRepository {
   private _repository = appDataSource.getRepository(AccountEntity);
-  
-  private mapEntity(entity: AccountEntity ){
-    return{
+
+  private mapEntity(entity: AccountEntity) {
+    return {
       id: entity.id,
       balance: entity.balance,
       limit: entity.limit,
@@ -17,7 +17,7 @@ export class AccountRepository {
   }
 
   async saveAcc(acc: NewAccountDTO): Promise<AccountDTO> {
-  
+
     const account = this._repository.create({
       id: randomUUID(),
       balance: acc.balance,
@@ -29,5 +29,19 @@ export class AccountRepository {
     await this._repository.save(account);
 
     return this.mapEntity(account)
+  }
+
+  async getAcc(id: string): Promise<AccountDTO | null> {
+    const acc = await appDataSource.manager.findOne(AccountEntity, {
+      where: {
+        clientID: id
+      }
+    })
+
+    if (!acc) {
+      return null
+    }
+
+    return acc
   }
 }
