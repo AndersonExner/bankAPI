@@ -72,6 +72,7 @@ export class ClientRepository {
     return user;
   }
 
+  
   async getAllUsers(name?: string): Promise<ClientDetailDTO[]> {
     const usersEntity = await appDataSource.manager.find(
       ClientEntity,

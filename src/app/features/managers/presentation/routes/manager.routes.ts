@@ -13,7 +13,9 @@ export default () => {
 
   router.get('/listClients', auth, managerController.getClients)
 
-  router.post('/changeClientLimit', auth, managerController.changeClientLimit)
+  router.put('/changeClientLimit', auth, managerController.changeClientLimit)
+
+  router.delete('/deleteClient', auth, managerController.deleteAcc)
 
   return router;
 }

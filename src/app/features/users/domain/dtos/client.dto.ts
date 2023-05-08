@@ -15,7 +15,7 @@ export interface ClientDetailDTO {
   name: string;
   email: string;
   cpf?: string;
-  account_id?: string;
+  accountID?: string;
   password?: string;
   profile?: Profile;
   managerID?: string;

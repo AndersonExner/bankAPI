@@ -4,7 +4,7 @@ import { BCryptPassword } from "../../../../shared/adapters/crypto";
 import { Profile } from "../../../../shared/infra/db/domain/enums/profile.enum";
 import { ManagerRepository } from "../../domain/infra/repositories";
 import { ManagerDTO } from "../../domain/dto";
-import { ClientDTO } from "../../../users/domain/dtos";
+
 
 export class ManagerController {
   async createManager(req: Request, res: Response) {
@@ -43,7 +43,27 @@ export class ManagerController {
   async changeClientLimit(req: Request, res: Response) {
     const { newLimit, id } = req.body
 
+    if (newLimit < 0) {
+      return badRequest(res, { success: false, error: "Limit must be over 0" })
+    }
+
     const sucess = await new ManagerRepository().changeClientLimit(id, newLimit)
+
+    if (!sucess) {
+      return badRequest(res, { success: false, error: "No user found" })
+    }
+
+    return ok(res, { success: true })
+  }
+
+  async deleteAcc(req: Request, res: Response) {
+    const { id } = req.body
+
+    if (!id) {
+      return badRequest(res, { success: false, error: "Inform client id" })
+    }
+
+    const sucess = await new ManagerRepository().deleteClientAcc(id)
 
     if (!sucess) {
       return badRequest(res, { success: false, error: "No user found" })

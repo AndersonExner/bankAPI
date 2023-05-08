@@ -19,6 +19,6 @@ export const appDataSource = new DataSource({
         rejectUnauthorized: false,
     },
     entities: [ClientEntity, AccountEntity, ManagerEntity],
-    migrations: [ CreateTableAccounts1682132360580 ],
+    migrations: [AlterTableClients1683248636202 ],
     synchronize: false,
 });
