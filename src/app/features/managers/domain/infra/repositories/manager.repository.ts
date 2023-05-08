@@ -106,4 +106,12 @@ export class ManagerRepository {
 
     return sucess.affected
   }
+
+  async deleteClientAcc(id: string): Promise<number | null> {
+    const sucess = await appDataSource.manager.delete(ClientEntity,
+      { id }
+    )
+
+    return sucess.affected!
+  }
 }
